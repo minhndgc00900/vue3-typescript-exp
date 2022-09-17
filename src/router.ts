@@ -7,6 +7,16 @@ const routes: Array<RouteRecordRaw> = [
     name: "tutorials",
     component: () => import("./components/TutorialsList.vue"),
   },
+  {
+    path: "/tutorials/:id",
+    name: "tutorial-details",
+    component: () => import("./components/TutorialDetails.vue"),
+  },
+  {
+    path: "/add",
+    name: "add",
+    component: () => import("./components/AddTutorial.vue"),
+  },
 ];
 
 const router = createRouter({
