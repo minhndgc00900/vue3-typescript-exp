@@ -5,17 +5,17 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     alias: "/tutorials",
     name: "tutorials",
-    component: () => import("./components/TutorialsList.vue"),
+    component: () => import("./Page/Home.vue"),
   },
   {
     path: "/tutorials/:id",
     name: "tutorial-details",
-    component: () => import("./components/TutorialDetails.vue"),
+    component: () => import("./Page/TutorialDetails.vue"),
   },
   {
     path: "/add",
     name: "add",
-    component: () => import("./components/AddTutorial.vue"),
+    component: () => import("./Page/AddTutorial.vue"),
   },
 ];
 

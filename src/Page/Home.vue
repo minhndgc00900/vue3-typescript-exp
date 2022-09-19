@@ -19,25 +19,12 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <h4>Tutorials List</h4>
-      <ul class="list-group">
-        <li
-          class="list-group-item"
-          :class="{
-            active: index == currentIndex,
-          }"
-          v-for="(tutorial, index) in tutorials"
-          :key="index"
-          @click="setActiveTutorial(tutorial, index)"
-        >
-          {{ tutorial.title }}
-        </li>
-      </ul>
-      <button class="m-3 btn btn-sm btn-danger" @click="removeAllTutorials">
-        Remove All
-      </button>
-    </div>
+    <ListTutor
+      :tutorials="tutorials"
+      :tutorIndex="currentIndex"
+      :setActiveTutorial="setActiveTutorial"
+      :removeAllTutorials="removeAllTutorials"
+    />
     <div class="col-md-6">
       <div v-if="currentTutorial.id">
         <h4>Tutorial</h4>
@@ -72,9 +59,13 @@ import TutorialDataService from "@/services/TutorialDataService";
 import { defineComponent } from "@vue/runtime-core";
 import Tutorial from "../types/Tutorial";
 import ResponseData from "../types/ResponseData";
+import ListTutor from "../components/ListTutor.vue";
 
 export default defineComponent({
   name: "tutorial-list",
+  components: {
+    ListTutor,
+  },
   data() {
     return {
       tutorials: [] as Tutorial[],
@@ -88,7 +79,7 @@ export default defineComponent({
       TutorialDataService.getAll()
         .then((response: ResponseData) => {
           this.tutorials = response.data;
-          console.log(response.data);
+          console.log(22, response);
         })
         .catch((error: Error) => {
           console.log(error);
