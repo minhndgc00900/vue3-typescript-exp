@@ -6,7 +6,7 @@
           type="text"
           class="form-control"
           placeholder="Search by title"
-          v-model="title"
+          v-model="state.title"
         />
         <div class="input-group-append">
           <button
@@ -20,28 +20,29 @@
       </div>
     </div>
     <ListTutor
-      :tutorials="tutorials"
-      :tutorIndex="currentIndex"
+      :tutorials="state.tutorials"
+      :tutorIndex="state.currentIndex"
       :setActiveTutorial="setActiveTutorial"
       :removeAllTutorials="removeAllTutorials"
     />
     <div class="col-md-6">
-      <div v-if="currentTutorial.id">
+      <div v-if="state.currentTutorial.id">
         <h4>Tutorial</h4>
         <div>
-          <label><strong>Title:</strong></label> {{ currentTutorial.title }}
+          <label><strong>Title:</strong></label>
+          {{ state.currentTutorial.title }}
         </div>
         <div>
           <label><strong>Description:</strong></label>
-          {{ currentTutorial.description }}
+          {{ state.currentTutorial.description }}
         </div>
         <div>
           <label><strong>Status:</strong></label>
-          {{ currentTutorial.published ? "Published" : "Pending" }}
+          {{ state.currentTutorial.published ? "Published" : "Pending" }}
         </div>
 
         <router-link
-          :to="'/tutorials/' + currentTutorial.id"
+          :to="'/tutorials/' + state.currentTutorial.id"
           class="badge badge-warning"
           >Edit</router-link
         >
@@ -56,70 +57,83 @@
 
 <script lang="ts">
 import TutorialDataService from "@/services/TutorialDataService";
-import { defineComponent } from "@vue/runtime-core";
+import { onMounted, reactive } from "vue";
 import Tutorial from "../types/Tutorial";
 import ResponseData from "../types/ResponseData";
 import ListTutor from "../components/ListTutor.vue";
 
-export default defineComponent({
+export default {
   name: "tutorial-list",
   components: {
     ListTutor,
   },
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       tutorials: [] as Tutorial[],
       currentTutorial: {} as Tutorial,
       currentIndex: -1,
       title: "",
-    };
-  },
-  methods: {
-    retrieveTutorials() {
+    });
+
+    const retrieveTutorials = () => {
       TutorialDataService.getAll()
         .then((response: ResponseData) => {
-          this.tutorials = response.data;
+          state.tutorials = response.data;
           console.log(22, response);
         })
         .catch((error: Error) => {
           console.log(error);
         });
-    },
-    refreshList() {
-      this.retrieveTutorials();
-      this.currentTutorial = {} as Tutorial;
-      this.currentIndex = -1;
-    },
-    setActiveTutorial(tutorial: Tutorial, index = -1) {
-      this.currentTutorial = tutorial;
-      this.currentIndex = index;
-    },
-    removeAllTutorials() {
+    };
+
+    const refreshList = () => {
+      retrieveTutorials();
+      state.currentTutorial = {} as Tutorial;
+      state.currentIndex = -1;
+    };
+
+    const setActiveTutorial = (tutorial: Tutorial, index = -1) => {
+      state.currentTutorial = tutorial;
+      state.currentIndex = index;
+    };
+
+    const removeAllTutorials = () => {
       TutorialDataService.deleteAll()
         .then((response: ResponseData) => {
           console.log(response.data);
-          this.refreshList();
+          refreshList();
         })
         .catch((e: Error) => {
           console.log(e);
         });
-    },
-    searchTitle() {
-      TutorialDataService.findByTitle(this.title)
+    };
+
+    const searchTitle = () => {
+      TutorialDataService.findByTitle(state.title)
         .then((response: ResponseData) => {
-          this.tutorials = response.data;
-          this.setActiveTutorial({} as Tutorial);
+          state.tutorials = response.data;
+          setActiveTutorial({} as Tutorial);
           console.log(response.data);
         })
         .catch((e: Error) => {
           console.log(e);
         });
-    },
+    };
+
+    onMounted(() => {
+      retrieveTutorials();
+    });
+
+    return {
+      state,
+      retrieveTutorials,
+      refreshList,
+      setActiveTutorial,
+      removeAllTutorials,
+      searchTitle,
+    };
   },
-  mounted() {
-    this.retrieveTutorials();
-  },
-});
+};
 </script>
 
 <style></style>
