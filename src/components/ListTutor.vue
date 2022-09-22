@@ -24,10 +24,14 @@
 </template>
 
 <script lang="ts">
+import { useContext } from "@/store";
 import { defineComponent } from "vue";
 import Tutorial from "../types/Tutorial";
 
 export default defineComponent({
+  setup() {
+    return useContext;
+  },
   props: {
     tutorials: {
       type: Array as () => Tutorial[],
