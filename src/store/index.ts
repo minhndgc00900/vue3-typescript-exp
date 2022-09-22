@@ -1,5 +1,4 @@
-import { IStore } from "@/types/StoreContext";
-import { inject, reactive, readonly } from "vue";
+import { inject, reactive } from "vue";
 import { createStore } from "vuex";
 
 export default createStore<any>({

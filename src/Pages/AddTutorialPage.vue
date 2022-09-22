@@ -8,9 +8,7 @@ import AddTutorial from "../containers/AddTutorial.vue";
 
 export default defineComponent({
   name: "add-tutorial-page",
-  component: {
-    AddTutorial,
-  },
+  components: { AddTutorial },
 });
 </script>
 

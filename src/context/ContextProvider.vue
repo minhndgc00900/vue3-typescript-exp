@@ -1,11 +1,10 @@
 <template>
-  <Slot />
+  <slot />
 </template>
 
 <script lang="ts">
-import { provide } from "@vue/runtime-core";
 import { states } from "../store/index";
-import { watch } from "vue";
+import { watch, provide } from "vue";
 
 export default {
   setup() {

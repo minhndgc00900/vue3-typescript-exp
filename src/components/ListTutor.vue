@@ -1,6 +1,7 @@
 <template>
   <div class="col-md-6">
     <h4>Tutorials List</h4>
+    <h4 class="">{{ useContext }}</h4>
     <ul class="list-group">
       <li
         class="list-group-item"
@@ -24,13 +25,13 @@
 </template>
 
 <script lang="ts">
-import { useContext } from "@/store";
-import { defineComponent } from "vue";
+import { inject } from "vue";
 import Tutorial from "../types/Tutorial";
 
-export default defineComponent({
+export default {
   setup() {
-    return useContext;
+    const useContext = inject("states");
+    return { useContext };
   },
   props: {
     tutorials: {
@@ -48,7 +49,7 @@ export default defineComponent({
       required: true,
     },
   },
-});
+};
 </script>
 
 <style></style>
